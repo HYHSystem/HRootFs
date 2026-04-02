@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <remote name="origin" fetch="https://git.hyhsystem.cn/"/>
+  <default revision="master" remote="origin" sync-j="4"/>
+  <project path="buildroot/buildroot" name="HYHSystem/buildroot"/>
+  <project path="lib/HCppBox" name="HEYAHONG/HCppBox"/>
+</manifest>
