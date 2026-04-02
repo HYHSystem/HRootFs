@@ -2,6 +2,10 @@
 <manifest>
   <remote name="HRootFS" fetch="https://git.hyhsystem.cn/"/>
   <default revision="master" remote="HRootFS" sync-j="4"/>
+  <project path="script" name="HYHSystem/HRootFs">
+    <linkfile src="LICENSE" dest="LICENSE"/>
+    <linkfile src="ReadMe.md" dest="ReadMe.md"/>
+  </project>
   <project path="buildroot/buildroot" name="HYHSystem/buildroot"/>
   <project path="lib/HCppBox" name="HEYAHONG/HCppBox"/>
 </manifest>
