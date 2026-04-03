@@ -5,7 +5,9 @@
   <project path="script" name="HYHSystem/HRootFs">
     <linkfile src="LICENSE" dest="LICENSE"/>
     <linkfile src="ReadMe.md" dest="ReadMe.md"/>
+    <linkfile src="Makefile" dest="Makefile"/>
   </project>
   <project path="buildroot/buildroot" name="HYHSystem/buildroot"/>
   <project path="lib/HCppBox" name="HEYAHONG/HCppBox"/>
 </manifest>
+
