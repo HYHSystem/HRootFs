@@ -14,6 +14,7 @@ ${STAMPDIR}/.buildroot_prepare_${BUILDROOT_GIT_REV}:
 	@touch ${STAMPDIR}/.buildroot_prepare_${BUILDROOT_GIT_REV}
 
 buildroot_prepare: ${STAMPDIR}/.buildroot_prepare_${BUILDROOT_GIT_REV}
+	@-buildroot_path_patch
 	@echo buildroot prepare!
 
 prepare_step += buildroot_prepare
