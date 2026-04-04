@@ -1,7 +1,7 @@
 
 BUILDROOT_SOURCE ?= ${TOPDIR}/buildroot/buildroot/
 BUILDROOT_LOCAL_SOURCE ?= ${SRCDIR}/buildroot/
-BUILDROOT_GIT_REV := $(shell git --git-dir=${BUILDROOT_SOURCE}/.git rev-parse HEAD )
+BUILDROOT_GIT_REV := $(shell git --git-dir="${BUILDROOT_SOURCE}/.git" rev-parse HEAD )
 
 .PHONY:buildroot_prepare buildroot_world buildroot_clean %config
 
@@ -13,6 +13,7 @@ ${STAMPDIR}/.buildroot_prepare_${BUILDROOT_GIT_REV}:
 	@-rm -rf ${STAMPDIR}/.*_* 2> /dev/null >/dev/null
 	@rsync -rlhz --delete  ${BUILDROOT_SOURCE}/ ${BUILDROOT_LOCAL_SOURCE}/
 	@-cp ${TEMPDIR}/buildroot_config ${BUILDROOT_LOCAL_SOURCE}/.config 2> /dev/null >/dev/null
+	@-ln -sf "${BUILDROOT_SOURCE}/.git" "${BUILDROOT_LOCAL_SOURCE}/.git" 2> /dev/null >/dev/null
 	@touch ${STAMPDIR}/.buildroot_prepare_${BUILDROOT_GIT_REV}
 
 buildroot_prepare: ${STAMPDIR}/.buildroot_prepare_${BUILDROOT_GIT_REV}
