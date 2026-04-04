@@ -49,10 +49,14 @@ repo sync
 
 本工程的构建目标如下:
 
-- all：默认构建目标，使用此目标前必须使用%config
+- all：默认构建目标，使用此目标前必须使用%config,当构建完成后，用户可在`local/src/buildroot/output`找到输出文件。
 - %config:对buildroot进行配置包括menuconfig与buildroot的configs目录下的defconfig。注意:不是目标名为%config，而是匹配以config结尾且被buildroot支持的所有目标。
 - clean:清理构建
 - dist-clean:清除所有生成的文件。若当源代码进行了更新，用户可能需要使用此目标减少因版本不同而造成的错误。
 
+## 配置(config)
 
+此章节描述除buildroot原生支持的配置，一般可使用`make 配置名`启用相应配置。
+
+- hrootfs_qemu_x86_64_defconfig：支持在qemu中测试的hrootfs镜像，以buildroot原生支持的qemu_x86_64_defconfig作为模板。
 
