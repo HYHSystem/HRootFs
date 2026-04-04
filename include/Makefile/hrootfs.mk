@@ -11,6 +11,7 @@ HROOTFS_GIT_REV := $(shell git --git-dir="${HROOTFS_SOURCE}/.git" rev-parse HEAD
 ${STAMPDIR}/.hrootfs_configure_${HROOTFS_GIT_REV}:
 	@echo install hrootfs config!
 	@for defconfig in $(shell ls "${HROOTFS_SOURCE}/configs"); do ln -sf "${HROOTFS_SOURCE}/configs/$${defconfig}" "${BUILDROOT_LOCAL_SOURCE}/configs/$${defconfig}"; done
+	@ln -sf "${HROOTFS_SOURCE}/board/hrootfs" "${BUILDROOT_LOCAL_SOURCE}/board/hrootfs"
 	@touch ${STAMPDIR}/.hrootfs_configure_${HROOTFS_GIT_REV}
 
 

@@ -60,3 +60,6 @@ repo sync
 
 - hrootfs_qemu_x86_64_defconfig：支持在qemu中测试的hrootfs镜像，以buildroot原生支持的qemu_x86_64_defconfig作为模板。
 
+## 板级支持
+
+板级支持见[board/hrootfs/](board/hrootfs/)。
