@@ -7,10 +7,12 @@ BUILDROOT_GIT_REV := $(shell git --git-dir=${BUILDROOT_SOURCE}/.git rev-parse HE
 
 #将源代码复制到本地
 ${STAMPDIR}/.buildroot_prepare_${BUILDROOT_GIT_REV}:
+	@-cp ${BUILDROOT_LOCAL_SOURCE}/.config ${TEMPDIR}/buildroot_config
 	@-rm -rf ${BUILDROOT_LOCAL_SOURCE}
 	@#因为buildroot是基础，因此需要清理所有戳
 	@-rm -rf ${STAMPDIR}/.*_*
 	@rsync -rlhz --delete  ${BUILDROOT_SOURCE}/ ${BUILDROOT_LOCAL_SOURCE}/
+	@-cp ${TEMPDIR}/buildroot_config ${BUILDROOT_LOCAL_SOURCE}/.config
 	@touch ${STAMPDIR}/.buildroot_prepare_${BUILDROOT_GIT_REV}
 
 buildroot_prepare: ${STAMPDIR}/.buildroot_prepare_${BUILDROOT_GIT_REV}
