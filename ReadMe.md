@@ -39,11 +39,14 @@ repo sync
 本工程主要使用以下工具:
 
 - gcc
+- g++
 - make
 - cmake
 - rsync
 - git
 - patch
+- coreutils
+- findutils
 
 若以上工具未正常安装，可能不能正常构建。用户可自行安装以上工具或者使用HEnvBox搭建环境。
 
