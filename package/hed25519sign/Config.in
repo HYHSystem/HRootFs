@@ -8,8 +8,18 @@ config BR2_PACKAGE_HED25519SIGN
 	depends on BR2_USE_WCHAR
 	depends on BR2_INSTALL_LIBSTDCPP
 	depends on BR2_TOOLCHAIN_HAS_THREADS
+	select BR2_PACKAGE_HOST_HED25519SIGN
 	help
 	  HCppBox hed25519sign
+
+	  https://git.hyhsystem.cn/HEYAHONG/HCppBox
+
+
+
+config BR2_PACKAGE_HOST_HED25519SIGN
+	bool "host hed25519sign"
+	help
+	  HCppBox hed25519sign host tool
 
 	  https://git.hyhsystem.cn/HEYAHONG/HCppBox
 

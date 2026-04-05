@@ -16,3 +16,4 @@ HED25519SIGN_CONF_OPTS = -DHTOOLS_INSTALL_DIR=/usr/
 HED25519SIGN_SUBDIR = htools/hcrypto_tools/hed25519sign/
 
 $(eval $(cmake-package))
+$(eval $(host-cmake-package))
