@@ -63,3 +63,8 @@ repo sync
 ## 板级支持
 
 板级支持见[board/hrootfs/](board/hrootfs/)。
+
+## 软件包
+
+软件包见 [package](package)
+
