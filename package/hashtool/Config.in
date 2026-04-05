@@ -1,0 +1,25 @@
+comment "hashtool needs a toolchain w/ C++, wchar, dynamic library, threads"
+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+
+config BR2_PACKAGE_HASHTOOL
+	bool "hashtool"
+	depends on !BR2_STATIC_LIBS
+	depends on BR2_USE_WCHAR
+	depends on BR2_INSTALL_LIBSTDCPP
+	depends on BR2_TOOLCHAIN_HAS_THREADS
+	select BR2_PACKAGE_HOST_HASHTOOL
+	help
+	  HCppBox hashtool
+
+	  https://git.hyhsystem.cn/HEYAHONG/HCppBox
+
+
+
+config BR2_PACKAGE_HOST_HASHTOOL
+	bool "host hashtool"
+	help
+	  HCppBox hashtool host tool
+
+	  https://git.hyhsystem.cn/HEYAHONG/HCppBox
+
