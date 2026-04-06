@@ -15,7 +15,7 @@ ${STAMPDIR}/.hrootfs_configure_${HROOTFS_GIT_REV}:
 	@ln -sf "${HROOTFS_SOURCE}/board/hrootfs" "${BUILDROOT_LOCAL_SOURCE}/board/hrootfs"
 	@echo  > "${BUILDROOT_LOCAL_SOURCE}/package/HRootFs.Config.in"
 	@echo  menu \"HRootFs\" > "${BUILDROOT_LOCAL_SOURCE}/package/HRootFs.Config.in"
-	@for pkg in $(shell ls "${HROOTFS_SOURCE}/package/"); do ln -sf "${HROOTFS_SOURCE}/package/$${pkg}" "${BUILDROOT_LOCAL_SOURCE}/package/$${pkg}"; if [ -e "${HROOTFS_SOURCE}/package/$${pkg}/Config.in" ]; then echo source \"package/$${pkg}/Config.in\" >> "${BUILDROOT_LOCAL_SOURCE}/package/HRootFs.Config.in"; fi; done
+	@for pkg in $(shell ls "${HROOTFS_SOURCE}/package/"); do if [ -d "${HROOTFS_SOURCE}/package/$${pkg}" ]; then  ln -sf "${HROOTFS_SOURCE}/package/$${pkg}" "${BUILDROOT_LOCAL_SOURCE}/package/$${pkg}"; if [ -e "${HROOTFS_SOURCE}/package/$${pkg}/Config.in" ]; then echo source \"package/$${pkg}/Config.in\" >> "${BUILDROOT_LOCAL_SOURCE}/package/HRootFs.Config.in"; fi; fi; done
 	@echo  endmenu  >> "${BUILDROOT_LOCAL_SOURCE}/package/HRootFs.Config.in"
 	@cd "${BUILDROOT_LOCAL_SOURCE}" && git checkout package/Config.in 
 	@echo source \"package/HRootFs.Config.in\" >> "${BUILDROOT_LOCAL_SOURCE}/package/Config.in"
