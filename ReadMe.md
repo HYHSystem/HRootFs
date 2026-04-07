@@ -72,3 +72,19 @@ repo sync
 
 软件包见 [package](package)
 
+## 模拟器
+
+对于支持模拟器的配置，可以使用模拟器（一般是qemu）进行测试。
+
+以`hrootfs_qemu_x86_64_defconfig`为例，使用以下命令可启动模拟器:
+
+```bash
+#进行构建前需要使用repo将源代码完全下载
+
+#进行配置
+make hrootfs_qemu_x86_64_defconfig
+#启动模拟器
+make emulator
+```
+
+若未特殊说明，用户名为root,无密码。
