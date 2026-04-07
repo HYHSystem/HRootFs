@@ -13,12 +13,12 @@ ${STAMPDIR}/.buildroot_prepare_${BUILDROOT_GIT_REV}:
 	@-rm -rf ${STAMPDIR}/.*_* 2> /dev/null >/dev/null
 	@rsync -rlhz --delete  ${BUILDROOT_SOURCE}/ ${BUILDROOT_LOCAL_SOURCE}/
 	@-cp ${TEMPDIR}/buildroot_config ${BUILDROOT_LOCAL_SOURCE}/.config 2> /dev/null >/dev/null
-	@-ln -sf "${BUILDROOT_SOURCE}/.git" "${BUILDROOT_LOCAL_SOURCE}/.git" 2> /dev/null >/dev/null
+	@-ln -Tsf "${BUILDROOT_SOURCE}/.git" "${BUILDROOT_LOCAL_SOURCE}/.git" 2> /dev/null >/dev/null
 	@touch ${STAMPDIR}/.buildroot_prepare_${BUILDROOT_GIT_REV}
 
 buildroot_prepare: ${STAMPDIR}/.buildroot_prepare_${BUILDROOT_GIT_REV}
 	@-buildroot_path_patch 2> /dev/null >/dev/null
-	@ [ -e "${BUILDROOT_LOCAL_SOURCE}/dl/" ] || ln -sf ${DLDIR} ${BUILDROOT_LOCAL_SOURCE}/dl
+	@ [ -e "${BUILDROOT_LOCAL_SOURCE}/dl/" ] || ln -Tsf ${DLDIR} ${BUILDROOT_LOCAL_SOURCE}/dl
 	@echo buildroot prepare!
 
 prepare_step += buildroot_prepare
