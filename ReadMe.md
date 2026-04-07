@@ -56,6 +56,7 @@ repo sync
 - %config:对buildroot进行配置包括menuconfig与buildroot的configs目录下的defconfig。注意:不是目标名为%config，而是匹配以config结尾且被buildroot支持的所有目标。
 - clean:清理构建
 - dist-clean:清除所有生成的文件。若当源代码进行了更新，用户可能需要使用此目标减少因版本不同而造成的错误。
+- emulator:启动模拟器（仅限于支持模拟器的配置）
 
 ## 配置(config)
 

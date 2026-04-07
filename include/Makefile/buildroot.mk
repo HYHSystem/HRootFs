@@ -40,4 +40,6 @@ clean_step += buildroot_clean
 %config: configure
 	@make -C ${BUILDROOT_LOCAL_SOURCE} $@
 	echo buildroot $@
-
+#模拟器
+emulator: build
+	@[ -x  "${BUILDROOT_LOCAL_SOURCE}/output/images/start-qemu.sh" ] && "${BUILDROOT_LOCAL_SOURCE}/output/images/start-qemu.sh" 
