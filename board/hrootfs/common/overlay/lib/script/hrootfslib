@@ -1,2 +1,7 @@
 #!/bin/sh
 
+#加载配置文件
+[ -e /lib/script/hrootfsconfig ] && . /lib/script/hrootfsconfig
+[ -e /hrootfsconfig ] && . /hrootfsconfig
+
+

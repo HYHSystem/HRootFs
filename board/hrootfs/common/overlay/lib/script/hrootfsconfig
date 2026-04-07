@@ -1,0 +1,5 @@
+#!/bin/sh
+
+#此文件用于存放默认配置
+
+HROOTFS_NAME="hrootfs"
