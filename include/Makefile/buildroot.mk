@@ -19,6 +19,7 @@ ${STAMPDIR}/.buildroot_prepare_${BUILDROOT_GIT_REV}:
 buildroot_prepare: ${STAMPDIR}/.buildroot_prepare_${BUILDROOT_GIT_REV}
 	@-buildroot_path_patch 2> /dev/null >/dev/null
 	@ [ -e "${BUILDROOT_LOCAL_SOURCE}/dl/" ] || ln -Tsf ${DLDIR} ${BUILDROOT_LOCAL_SOURCE}/dl
+	@ mkdir -p "${TEMPDIR}/buildroot_output" && ln -Tsf ${TEMPDIR}/buildroot_output  ${BUILDROOT_LOCAL_SOURCE}/output
 	@echo buildroot prepare!
 
 prepare_step += buildroot_prepare
