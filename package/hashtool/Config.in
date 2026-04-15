@@ -16,10 +16,3 @@ config BR2_PACKAGE_HASHTOOL
 
 
 
-config BR2_PACKAGE_HOST_HASHTOOL
-	bool "host hashtool"
-	help
-	  HCppBox hashtool host tool
-
-	  https://git.hyhsystem.cn/HEYAHONG/HCppBox
-

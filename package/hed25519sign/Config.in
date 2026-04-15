@@ -14,12 +14,3 @@ config BR2_PACKAGE_HED25519SIGN
 
 	  https://git.hyhsystem.cn/HEYAHONG/HCppBox
 
-
-
-config BR2_PACKAGE_HOST_HED25519SIGN
-	bool "host hed25519sign"
-	help
-	  HCppBox hed25519sign host tool
-
-	  https://git.hyhsystem.cn/HEYAHONG/HCppBox
-

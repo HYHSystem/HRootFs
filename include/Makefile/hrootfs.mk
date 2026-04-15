@@ -15,10 +15,15 @@ ${STAMPDIR}/.hrootfs_configure_${HROOTFS_GIT_REV}:
 	@ln -Tsf "${HROOTFS_SOURCE}/board/hrootfs" "${BUILDROOT_LOCAL_SOURCE}/board/hrootfs"
 	@echo  > "${BUILDROOT_LOCAL_SOURCE}/package/HRootFs.Config.in"
 	@echo  menu \"HRootFs\" > "${BUILDROOT_LOCAL_SOURCE}/package/HRootFs.Config.in"
-	@for pkg in $(shell ls "${HROOTFS_SOURCE}/package/"); do if [ -d "${HROOTFS_SOURCE}/package/$${pkg}" ]; then  ln -Tsf "${HROOTFS_SOURCE}/package/$${pkg}" "${BUILDROOT_LOCAL_SOURCE}/package/$${pkg}"; if [ -e "${HROOTFS_SOURCE}/package/$${pkg}/Config.in" ]; then echo source \"package/$${pkg}/Config.in\" >> "${BUILDROOT_LOCAL_SOURCE}/package/HRootFs.Config.in"; fi; fi; done
+	@echo  > "${BUILDROOT_LOCAL_SOURCE}/package/HRootFs.Config.in.host"
+	@echo  menu \"HRootFs Host Tool\" > "${BUILDROOT_LOCAL_SOURCE}/package/HRootFs.Config.in.host"
+	@for pkg in $(shell ls "${HROOTFS_SOURCE}/package/"); do if [ -d "${HROOTFS_SOURCE}/package/$${pkg}" ]; then  ln -Tsf "${HROOTFS_SOURCE}/package/$${pkg}" "${BUILDROOT_LOCAL_SOURCE}/package/$${pkg}"; if [ -e "${HROOTFS_SOURCE}/package/$${pkg}/Config.in" ]; then echo source \"package/$${pkg}/Config.in\" >> "${BUILDROOT_LOCAL_SOURCE}/package/HRootFs.Config.in"; fi; if [ -e "${HROOTFS_SOURCE}/package/$${pkg}/Config.in.host" ]; then echo source \"package/$${pkg}/Config.in.host\" >> "${BUILDROOT_LOCAL_SOURCE}/package/HRootFs.Config.in.host"; fi; fi; done
 	@echo  endmenu  >> "${BUILDROOT_LOCAL_SOURCE}/package/HRootFs.Config.in"
 	@cd "${BUILDROOT_LOCAL_SOURCE}" && git checkout package/Config.in 
 	@echo source \"package/HRootFs.Config.in\" >> "${BUILDROOT_LOCAL_SOURCE}/package/Config.in"
+	@echo  endmenu  >> "${BUILDROOT_LOCAL_SOURCE}/package/HRootFs.Config.in.host"
+	@cd "${BUILDROOT_LOCAL_SOURCE}" && git checkout package/Config.in.host
+	@echo source \"package/HRootFs.Config.in.host\" >> "${BUILDROOT_LOCAL_SOURCE}/package/Config.in.host"
 	@touch ${STAMPDIR}/.hrootfs_configure_${HROOTFS_GIT_REV}
 
 

@@ -2,10 +2,6 @@
 
 本目录主要用于存放HRootFs的软件包。
 
-注意:
-
-- 无论是目标（target）软件包还是 宿主机(host)软件包均在HRootFs菜单下配置。
-
 # 软件包
 
 ## `HCppBox`
