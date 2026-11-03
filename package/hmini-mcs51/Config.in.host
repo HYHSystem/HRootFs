@@ -1,0 +1,6 @@
+config BR2_PACKAGE_HOST_HMINI_MCS51
+	bool "host hmini-mcs51"
+	help
+	  HCppBox hmini-mcs51 host tool
+
+	  https://git.hyhsystem.cn/HEYAHONG/HCppBox

@@ -1,0 +1,8 @@
+config BR2_PACKAGE_HOST_HSIMULATORTOOLS
+	bool "host hsimulatortools"
+	help
+	  HCppBox hsimulatortools host tool
+
+	  This tool requires wxWidgets 3.2 or later on the build host.
+
+	  https://git.hyhsystem.cn/HEYAHONG/HCppBox

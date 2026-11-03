@@ -1,0 +1,12 @@
+comment "matiec needs a toolchain w/ C++, gcc >= 7"
+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+
+config BR2_PACKAGE_MATIEC
+	bool "matiec"
+	depends on BR2_INSTALL_LIBSTDCPP
+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+	select BR2_PACKAGE_HOST_MATIEC
+	help
+	  IEC 61131-3 compiler (matiec)
+
+	  https://github.com/thiagoralves/matiec

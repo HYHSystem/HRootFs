@@ -1,0 +1,8 @@
+config BR2_PACKAGE_HOST_IMAGERESOURCEGENERATE
+	bool "host imageresourcegenerate"
+	help
+	  HCppBox imageresourcegenerate host tool
+
+	  This tool requires OpenCV installed on the build host.
+
+	  https://git.hyhsystem.cn/HEYAHONG/HCppBox

@@ -1,0 +1,6 @@
+config BR2_PACKAGE_HOST_MATIEC
+	bool "host matiec"
+	help
+	  IEC 61131-3 compiler (matiec) host tool
+
+	  https://github.com/thiagoralves/matiec

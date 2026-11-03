@@ -1,0 +1,15 @@
+comment "hmini-rv32ima needs a toolchain w/ C++, wchar, dynamic library, threads"
+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+
+config BR2_PACKAGE_HMINI_RV32IMA
+	bool "hmini-rv32ima"
+	depends on !BR2_STATIC_LIBS
+	depends on BR2_USE_WCHAR
+	depends on BR2_INSTALL_LIBSTDCPP
+	depends on BR2_TOOLCHAIN_HAS_THREADS
+	select BR2_PACKAGE_HOST_HMINI_RV32IMA
+	help
+	  HCppBox hmini-rv32ima
+
+	  https://git.hyhsystem.cn/HEYAHONG/HCppBox

@@ -1,0 +1,6 @@
+config BR2_PACKAGE_HOST_HMINI_RV32IMA
+	bool "host hmini-rv32ima"
+	help
+	  HCppBox hmini-rv32ima host tool
+
+	  https://git.hyhsystem.cn/HEYAHONG/HCppBox

@@ -1,0 +1,8 @@
+config BR2_PACKAGE_HOST_HMODBUSHELPER
+	bool "host hmodbushelper"
+	help
+	  HCppBox hmodbushelper host tool
+
+	  This tool requires wxWidgets 3.2 or later and libserialport on the build host.
+
+	  https://git.hyhsystem.cn/HEYAHONG/HCppBox

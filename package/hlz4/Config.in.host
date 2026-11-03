@@ -1,0 +1,6 @@
+config BR2_PACKAGE_HOST_HLZ4
+	bool "host hlz4"
+	help
+	  HCppBox hlz4 host tool
+
+	  https://git.hyhsystem.cn/HEYAHONG/HCppBox

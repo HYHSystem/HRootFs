@@ -1,0 +1,20 @@
+comment "imageresourcegenerate needs a toolchain w/ C++, wchar, dynamic library, NPTL threads, atomic"
+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+		!BR2_TOOLCHAIN_HAS_ATOMIC
+
+config BR2_PACKAGE_IMAGERESOURCEGENERATE
+	bool "imageresourcegenerate"
+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+	depends on !BR2_STATIC_LIBS
+	depends on BR2_USE_WCHAR
+	depends on BR2_INSTALL_LIBSTDCPP
+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11 (opencv4)
+	select BR2_PACKAGE_OPENCV4
+	select BR2_PACKAGE_OPENCV4_LIB_IMGCODECS
+	select BR2_PACKAGE_HOST_IMAGERESOURCEGENERATE
+	help
+	  HCppBox imageresourcegenerate
+
+	  https://git.hyhsystem.cn/HEYAHONG/HCppBox

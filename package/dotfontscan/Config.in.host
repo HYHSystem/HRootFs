@@ -1,0 +1,6 @@
+config BR2_PACKAGE_HOST_DOTFONTSCAN
+	bool "host dotfontscan"
+	help
+	  HCppBox dotfontscan host tool
+
+	  https://git.hyhsystem.cn/HEYAHONG/HCppBox

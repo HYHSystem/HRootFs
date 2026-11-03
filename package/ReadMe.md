@@ -12,4 +12,19 @@
 | ------------------------------ | ----------------- | ------------------------------------------------------------ |
 | [`hashtool`](hashtool)         | 哈希工具          | 支持target与host                                             |
 | [`hed25519sign`](hed25519sign) | `Ed25519`签名工具 | 支持target与host,公私钥文件兼容openwrt的[usign](https://git.openwrt.org/project/usign/)工具 |
+| [`hcrctablegenerate`](hcrctablegenerate) | 生成CRC校验查找表及相关代码 | 支持target与host |
+| [`hgzip`](hgzip) | gzip文件压缩及解压缩工具 | 支持target与host |
+| [`hlz4`](hlz4) | lz4文件压缩及解压缩工具 | 支持target与host |
+| [`hmini-mcs51`](hmini-mcs51) | mcs51指令集模拟（最小版） | 支持target与host,支持通过openblt加载程序 |
+| [`hmini-rv32ima`](hmini-rv32ima) | mini-rv32ima修改版 | 支持target与host |
+| [`hmini-rv32imav2`](hmini-rv32imav2) | mini-rv32ima第二版 | 支持target与host,支持通过openblt加载程序 |
+| [`dumpplcdll`](dumpplcdll) | 获取软件PLC动态链接库中的信息 | 支持target与host |
+| [`dotfontscan`](dotfontscan) | 点阵字体生成工具 | 支持target与host,依赖`freetype` |
+| [`imageresourcegenerate`](imageresourcegenerate) | 图像资源处理工具 | 支持target与host,依赖`opencv4` |
+| [`hmodbustcpgateway`](hmodbustcpgateway) | 独立`Modbus` TCP网关程序 | 支持target与host,依赖`libserialport`、`libevent` |
+| [`hguitools`](hguitools) | `hgui`组件辅助工具 | 仅host,依赖`wxWidgets` |
+| [`hmodbushelper`](hmodbushelper) | `hmodbus`组件开发辅助工具 | 仅host,依赖`wxWidgets`、`libserialport` |
+| [`hsimulatortools`](hsimulatortools) | `hsimulator`组件辅助工具（已弃用） | 仅host,依赖`wxWidgets` |
+| [`matiec`](matiec) | IEC 61131-3编译器 | 支持target与host |
+| [`rvvm`](rvvm) | `RVVM`虚拟机 | 支持target与host |
 
