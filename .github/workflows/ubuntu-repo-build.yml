@@ -1,0 +1,300 @@
+name: ubuntu repo build
+
+on:
+  push:
+    # 仅在 testing 标签更新时触发。
+    tags:
+      - testing
+
+permissions:
+  contents: write
+
+env:
+  # 构建过程中需要从网络下载大量源码包，网络偶发失败很常见。
+  # 构建失败后额外重试 3 次，即最多尝试 4 次。
+  BUILD_RETRIES: 3
+  # repo 清单地址，默认与 ReadMe.md 中的说明一致。
+  # 如需构建其他镜像源（例如 GitHub 镜像），可通过仓库变量 HROOTFS_REPO_MANIFEST_URL 覆盖。
+  REPO_MANIFEST_URL: ${{ vars.HROOTFS_REPO_MANIFEST_URL || 'https://git.hyhsystem.cn/HYHSystem/HRootFs' }}
+
+jobs:
+  discover:
+    name: Discover HRootFs projects
+    runs-on: ubuntu-latest
+    outputs:
+      projects: ${{ steps.find.outputs.projects }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Find configs projects
+        id: find
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+
+          # configs 下每个 defconfig 表示一个工程，工程名为去掉 defconfig 结尾的文件名。
+          entries=""
+          for file in configs/*defconfig; do
+            [[ -f "$file" ]] || continue
+
+            base="$(basename "$file")"
+            name="${base%_defconfig}"
+            if [[ "$name" == "$base" ]]; then
+              # 兼容不带下划线的 xxxdefconfig 命名。
+              name="${base%defconfig}"
+            fi
+            [[ -n "$name" ]] || continue
+
+            entries+="${name}"$'\t'"${base}"$'\n'
+          done
+
+          if [[ -z "$entries" ]]; then
+            echo 'projects=[]' >> "$GITHUB_OUTPUT"
+            echo "No configs/*defconfig project was found."
+            exit 0
+          fi
+
+          json="$(printf '%s' "$entries" | jq -Rsc 'split("\n") | map(select(length > 0) | split("\t") | {name: .[0], defconfig: .[1]})')"
+          echo "projects=${json}" >> "$GITHUB_OUTPUT"
+          printf 'Discovered projects:\n%s\n' "$json"
+
+  build:
+    name: Build ${{ matrix.project.name }}
+    needs: discover
+    if: needs.discover.outputs.projects != '[]'
+    runs-on: ubuntu-latest
+    # buildroot 完整编译耗时较长，失败重试时会继续使用已有产物。
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJSON(needs.discover.outputs.projects) }}
+    steps:
+      - name: Free disk space
+        run: |
+          sudo rm -rf \
+            /usr/local/lib/android \
+            /usr/share/dotnet \
+            /opt/ghc \
+            /opt/hostedtoolcache/CodeQL \
+            /usr/local/share/boost
+          df -h
+
+      - name: Install build environment
+        # 依赖参考 ReadMe.md 与 buildroot 手册的系统要求:
+        # https://buildroot.org/downloads/manual/manual.html#requirement
+        # 必选包(2.1)与推荐/源码获取/配置界面相关的可选包(2.2)均已覆盖;
+        # 文档与图表生成类可选包(asciidoc、graphviz 等)在构建中不需要,故未安装。
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          sudo apt-get update
+          sudo apt-get install -y \
+            bash \
+            bc \
+            binutils \
+            bison \
+            build-essential \
+            bzip2 \
+            ca-certificates \
+            cmake \
+            coreutils \
+            cpio \
+            curl \
+            cvs \
+            diffutils \
+            file \
+            findutils \
+            flex \
+            g++ \
+            gawk \
+            gcc \
+            git \
+            gzip \
+            libncurses-dev \
+            libssl-dev \
+            make \
+            mercurial \
+            openssh-client \
+            patch \
+            perl \
+            python3 \
+            rsync \
+            sed \
+            subversion \
+            tar \
+            time \
+            unzip \
+            wget \
+            which
+
+          # buildroot 手册要求 file 必须位于 /usr/bin/file。
+          command -v file
+          ls -l /usr/bin/file
+
+          # 安装 repo 工具：优先使用发行版软件包，失败时使用官方启动脚本。
+          if ! sudo apt-get install -y repo; then
+            echo "::warning::The 'repo' package is unavailable; installing the launcher manually."
+            mkdir -p "$HOME/bin"
+            curl -fsSL https://storage.googleapis.com/git-repo-downloads/repo -o "$HOME/bin/repo"
+            chmod +x "$HOME/bin/repo"
+            echo "$HOME/bin" >> "$GITHUB_PATH"
+            export PATH="$HOME/bin:$PATH"
+          fi
+
+          repo --version
+
+      - name: Initialize and sync repo workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          workspace="${RUNNER_TEMP}/HRootFs-workspace"
+          rm -rf "$workspace"
+          mkdir -p "$workspace"
+
+          # repo/git 需要一个可用的提交者信息。
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global color.ui false
+          git config --global advice.detachedHead false
+
+          cd "$workspace"
+          # 初始化需要在空目录中进行，且只需要初始化一次。
+          repo init -u "${REPO_MANIFEST_URL}"
+
+          # 同步源代码（网络偶发失败时重试）。
+          max_attempts=$((BUILD_RETRIES + 1))
+          for ((attempt = 1; attempt <= max_attempts; attempt++)); do
+            echo "::group::repo sync attempt ${attempt}/${max_attempts}"
+            if repo sync -j"$(nproc)"; then
+              echo "::endgroup::"
+              echo "repo sync succeeded on attempt ${attempt}."
+              break
+            fi
+            echo "::endgroup::"
+
+            if ((attempt == max_attempts)); then
+              echo "::error::repo sync failed after ${max_attempts} attempts."
+              exit 1
+            fi
+            echo "::warning::repo sync failed on attempt ${attempt}/${max_attempts}; retrying in 30 seconds..."
+            sleep 30
+          done
+
+          # 确认工程根目录的构建入口存在。
+          ls -la "$workspace"
+          [[ -f "${workspace}/Makefile" ]] || {
+            echo "::error::Makefile was not found in the repo workspace."
+            exit 1
+          }
+
+      - name: Build ${{ matrix.project.name }}
+        env:
+          PROJECT: ${{ matrix.project.name }}
+          DEFCONFIG: ${{ matrix.project.defconfig }}
+        working-directory: ${{ runner.temp }}/HRootFs-workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # 使用 make 工程 defconfig 配置工程。
+          echo "Configuring ${PROJECT} with ${DEFCONFIG}..."
+          make "${DEFCONFIG}"
+
+          # 构建（网络偶发失败时重试）。
+          max_attempts=$((BUILD_RETRIES + 1))
+          for ((attempt = 1; attempt <= max_attempts; attempt++)); do
+            echo "::group::make attempt ${attempt}/${max_attempts} for ${PROJECT}"
+            if make -j"$(nproc)"; then
+              echo "::endgroup::"
+              echo "Build of ${PROJECT} succeeded on attempt ${attempt}."
+              exit 0
+            fi
+            echo "::endgroup::"
+
+            if ((attempt < max_attempts)); then
+              echo "::warning::Build of ${PROJECT} failed on attempt ${attempt}/${max_attempts}; retrying in 30 seconds..."
+              sleep 30
+            fi
+          done
+
+          echo "::error::Build of ${PROJECT} failed after ${max_attempts} attempts."
+          exit 1
+
+      - name: Package ${{ matrix.project.name }}
+        env:
+          PROJECT: ${{ matrix.project.name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          output_dir="${RUNNER_TEMP}/HRootFs-workspace/local/src/buildroot/output"
+          images_dir="${output_dir}/images"
+          dist_dir="${RUNNER_TEMP}/dist"
+          mkdir -p "$dist_dir"
+
+          if [[ ! -d "$images_dir" ]]; then
+            echo "::error::Build output directory ${images_dir} does not exist."
+            exit 1
+          fi
+          if ! find "$images_dir" -type f -print -quit | grep -q .; then
+            echo "::error::Build output directory ${images_dir} is empty."
+            exit 1
+          fi
+
+          tar -czf "${dist_dir}/${PROJECT}-snapshot.tar.gz" -C "$output_dir" images
+
+          echo "Created ${PROJECT}-snapshot.tar.gz, first entries:"
+          tar -tzf "${dist_dir}/${PROJECT}-snapshot.tar.gz" | sed -n '1,50p'
+
+      - name: Upload ${{ matrix.project.name }} package
+        uses: actions/upload-artifact@v4
+        with:
+          name: rootfs-${{ matrix.project.name }}
+          path: ${{ runner.temp }}/dist/${{ matrix.project.name }}-snapshot.tar.gz
+          if-no-files-found: error
+          retention-days: 7
+
+  release:
+    name: Publish rootfs release
+    needs: [discover, build]
+    if: needs.build.result == 'success' && needs.discover.outputs.projects != '[]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download rootfs packages
+        uses: actions/download-artifact@v4
+        with:
+          pattern: rootfs-*
+          path: ${{ runner.temp }}/dist
+          merge-multiple: true
+
+      - name: Publish to the testing release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: testing
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mapfile -t files < <(
+            find "${RUNNER_TEMP}/dist" -maxdepth 1 -type f \
+              -name '*-snapshot.tar.gz' | sort
+          )
+          if ((${#files[@]} == 0)); then
+            echo "::error::No rootfs snapshot packages were downloaded."
+            exit 1
+          fi
+
+          if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release create "$RELEASE_TAG" \
+              --prerelease \
+              --title "$RELEASE_TAG" \
+              --notes "Automated HRootFs snapshots for tag \`${RELEASE_TAG}\`." \
+              --target "$GITHUB_SHA"
+          fi
+
+          gh release upload "$RELEASE_TAG" "${files[@]}" --clobber
