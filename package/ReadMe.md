@@ -22,6 +22,10 @@
 | [`dotfontscan`](dotfontscan) | 点阵字体生成工具 | 支持target与host,依赖`freetype` |
 | [`imageresourcegenerate`](imageresourcegenerate) | 图像资源处理工具 | 支持target与host,依赖`opencv4` |
 | [`hmodbustcpgateway`](hmodbustcpgateway) | 独立`Modbus` TCP网关程序 | 支持target与host,依赖`libserialport`、`libevent` |
+| [`hhttp`](hhttp) | 简易HTTP客户端 | 支持target与host,默认启用`openssl`支持 |
+| [`hhttpd`](hhttpd) | 简易HTTP服务端 | 支持target与host,默认启用`openssl`支持 |
+| [`hsntp`](hsntp) | 简易NTP客户端 | 支持target与host |
+| [`hsntpd`](hsntpd) | 简易NTP服务端 | 支持target与host |
 | [`hguitools`](hguitools) | `hgui`组件辅助工具 | 仅host,依赖`wxWidgets` |
 | [`hmodbushelper`](hmodbushelper) | `hmodbus`组件开发辅助工具 | 仅host,依赖`wxWidgets`、`libserialport` |
 | [`hsimulatortools`](hsimulatortools) | `hsimulator`组件辅助工具（已弃用） | 仅host,依赖`wxWidgets` |

@@ -1,0 +1,6 @@
+config BR2_PACKAGE_HOST_HSNTPD
+	bool "host hsntpd"
+	help
+	  HCppBox hsntpd host tool
+
+	  https://git.hyhsystem.cn/HEYAHONG/HCppBox

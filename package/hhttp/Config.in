@@ -1,0 +1,26 @@
+comment "hhttp needs a toolchain w/ C++, wchar, dynamic library, threads"
+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+
+config BR2_PACKAGE_HHTTP
+	bool "hhttp"
+	depends on !BR2_STATIC_LIBS
+	depends on BR2_USE_WCHAR
+	depends on BR2_INSTALL_LIBSTDCPP
+	depends on BR2_TOOLCHAIN_HAS_THREADS
+	select BR2_PACKAGE_HOST_HHTTP
+	help
+	  HCppBox hhttp
+
+	  https://git.hyhsystem.cn/HEYAHONG/HCppBox
+
+if BR2_PACKAGE_HHTTP
+
+config BR2_PACKAGE_HHTTP_OPENSSL
+	bool "openssl support"
+	default y
+	select BR2_PACKAGE_OPENSSL
+	help
+	  Enable HTTPS support using OpenSSL.
+
+endif
