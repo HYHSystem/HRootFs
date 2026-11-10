@@ -4,7 +4,7 @@
 HTOOLS_ATOMIC_PATCH = $(TOPDIR)/board/hrootfs/qemu/sparc_ss10/0001-hbox-link-libatomic.patch
 
 define HTOOLS_LINK_LIBATOMIC
-	grep -q 'target_link_libraries(HBox PUBLIC atomic)' $(@D)/hbox/CMakeLists.txt || \
+	grep -q 'target_link_libraries(HBox atomic)' $(@D)/hbox/CMakeLists.txt || \
 		patch -d $(@D) -p1 < $(HTOOLS_ATOMIC_PATCH)
 endef
 
