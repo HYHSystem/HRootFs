@@ -57,9 +57,12 @@ ASFLAGS         := $(ASFLAGS)
 LDFLAGS         := $(LDFLAGS)
 LDLIBS          := $(LDLIBS)
 
+# 仅交叉编译时导出交叉工具链，避免主机默认工具(如 as/cc)
+# 通过环境变量覆盖 buildroot 软件包自身的工具链选择。
+export AS CC CPP CXX LD AR NM STRIP OBJCOPY OBJDUMP PKG_CONFIG
+
 endif
 
-export AS CC CPP CXX LD AR NM STRIP OBJCOPY OBJDUMP PKG_CONFIG
 export CFLAGS CPPFLAGS CXXFLAGS ASFLAGS ASFLAGS LDFLAGS LDLIBS
 
 
