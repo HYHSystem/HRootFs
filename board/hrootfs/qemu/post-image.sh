@@ -33,7 +33,7 @@ QEMU_CMD_LINE="$(sed -r -e 's/^.*(qemu-system-)/\1/' <<<"${QEMU_CMD_LINE}")"
 
 # Disable graphical output and redirect serial I/Os to console
 case ${DEFCONFIG_NAME} in
-  (qemu_sh4eb_r2d_defconfig|qemu_sh4_r2d_defconfig)
+  (hrootfs_qemu_sh4eb_r2d_defconfig|hrootfs_qemu_sh4_r2d_defconfig)
     # Special case for SH4
     SERIAL_ARGS="-serial stdio -display none"
     ;;

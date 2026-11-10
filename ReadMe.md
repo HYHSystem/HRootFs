@@ -62,7 +62,7 @@ repo sync
 
 此章节描述除buildroot原生支持的配置，一般可使用`make 配置名`启用相应配置。
 
-- hrootfs_qemu_x86_64_defconfig：支持在qemu中测试的hrootfs镜像，以buildroot原生支持的qemu_x86_64_defconfig作为模板。
+- hrootfs_qemu_*_defconfig：支持在qemu中测试的hrootfs镜像，以buildroot原生支持的qemu_*_defconfig作为模板，包括x86、x86_64、aarch64、arm、riscv、mips、powerpc、s390x、loongarch64、sh4、m68k、microblaze、or1k、hppa、sparc、xtensa等架构的qemu板级配置。例如hrootfs_qemu_x86_64_defconfig对应qemu_x86_64_defconfig。
 
 ## 板级支持
 
