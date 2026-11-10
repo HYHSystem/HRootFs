@@ -1,0 +1,9 @@
+--- a/hbox/CMakeLists.txt	2026-11-10 19:05:06.465775887 +0800
++++ b/hbox/CMakeLists.txt	2026-11-10 19:05:06.468983880 +0800
+@@ -195,3 +195,6 @@
+ 
+ #添加第三方组件
+ add_subdirectory(h3rdparty)
++
++# sparc 等没有原生 4 字节原子指令的架构需要显式链接 libatomic。
++target_link_libraries(HBox PUBLIC atomic)

@@ -261,11 +261,19 @@ jobs:
   release:
     name: Publish rootfs release
     needs: [discover, build]
-    if: needs.build.result == 'success' && needs.discover.outputs.projects != '[]'
+    # 允许部分构建失败：只要有成功的构建产物就发布，全部失败时跳过。
+    if: >-
+      always() &&
+      needs.discover.result == 'success' &&
+      needs.discover.outputs.projects != '[]' &&
+      needs.build.result != 'cancelled' &&
+      needs.build.result != 'skipped'
     runs-on: ubuntu-latest
     steps:
       - name: Download rootfs packages
         uses: actions/download-artifact@v4
+        # 部分或全部构建失败时可能没有产物，此时继续由发布步骤判断。
+        continue-on-error: true
         with:
           pattern: rootfs-*
           path: ${{ runner.temp }}/dist
@@ -280,13 +288,14 @@ jobs:
         run: |
           set -euo pipefail
 
+          mkdir -p "${RUNNER_TEMP}/dist"
           mapfile -t files < <(
             find "${RUNNER_TEMP}/dist" -maxdepth 1 -type f \
               -name '*-snapshot.tar.gz' | sort
           )
           if ((${#files[@]} == 0)); then
-            echo "::error::No rootfs snapshot packages were downloaded."
-            exit 1
+            echo "::warning::No rootfs snapshot packages were downloaded; skipping release."
+            exit 0
           fi
 
           if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
