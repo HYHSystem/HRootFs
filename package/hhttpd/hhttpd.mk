@@ -21,5 +21,10 @@ else
 HHTTPD_CONF_OPTS += -DCMAKE_DISABLE_FIND_PACKAGE_OpenSSL=ON
 endif
 
+# GCC < 9 的 libstdc++ 将 std::filesystem 放在独立的 libstdc++fs 中。
+ifneq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_9),y)
+HHTTPD_CONF_OPTS += -DCMAKE_CXX_STANDARD_LIBRARIES=-lstdc++fs
+endif
+
 $(eval $(cmake-package))
 $(eval $(host-cmake-package))

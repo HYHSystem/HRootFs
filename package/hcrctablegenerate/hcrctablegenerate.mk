@@ -15,5 +15,10 @@ HCRCTABLEGENERATE_DEPENDENCIES = host-pkgconf
 HCRCTABLEGENERATE_CONF_OPTS = -DHTOOLS_INSTALL_DIR=/usr/
 HCRCTABLEGENERATE_SUBDIR = htools/hcrypto_tools/hcrctablegenerate/
 
+# GCC < 9 的 libstdc++ 将 std::filesystem 放在独立的 libstdc++fs 中。
+ifneq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_9),y)
+HCRCTABLEGENERATE_CONF_OPTS += -DCMAKE_CXX_STANDARD_LIBRARIES=-lstdc++fs
+endif
+
 $(eval $(cmake-package))
 $(eval $(host-cmake-package))
